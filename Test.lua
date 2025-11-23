@@ -2,104 +2,101 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "Lunara",
-   Icon = 111530409813861, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   Icon = 111530409813861,
    LoadingTitle = "Threads of Twilight...",
    LoadingSubtitle = "Tracing moonlit paths…",
-   ShowText = "Lunara", -- for mobile users to unhide rayfield, change if you'd like
-   Theme = "Amethyst", -- Check https://docs.sirius.menu/rayfield/configuration/themes
-
-   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
-
+   ShowText = "Lunara",
+   Theme = "Amethyst",
+   ToggleUIKeybind = "K",
    DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
-
+   DisableBuildWarnings = false,
    ConfigurationSaving = {
       Enabled = true,
-      FolderName = nil, -- Create a custom folder for your hub/game
+      FolderName = nil,
       FileName = "Moonlight"
    },
-
    Discord = {
-      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-      Invite = "https://discord.gg/cRFErEWv93", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+      Enabled = false,
+      Invite = "https://discord.gg/cRFErEWv93",
+      RememberJoins = true
    },
-
-   KeySystem = true, -- Set this to true to use our key system
+   KeySystem = true,
    KeySettings = {
       Title = "Lunara Key",
       Subtitle = "join my discord server to get key",
-      Note = "https://discord.gg/cRFErEWv93", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"LunaraOntop123"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+      Note = "https://discord.gg/cRFErEWv93",
+      FileName = "Key",
+      SaveKey = false,
+      GrabKeyFromSite = false,
+      Key = {"LunaraOntop123"}
    }
 })
 
-local Tab = Window:CreateTab("Main", 114045349662476) -- Title, Image
+local Tab = Window:CreateTab("Main", 114045349662476)
 
 local Toggle = Tab:CreateToggle({
-   Name = "Autofarm",
-   CurrentValue = false,
-   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-       autoFarmActive = Value
-       if Value then
-           spawn(function()
-               while autoFarmActive do
-                   for i, v in pairs(workspace:GetChildren()) do
-                       if v.ClassName == "Model" and v:FindFirstChild("Container") or v.Name == "PortCraneOversized" then
-                           v:Destroy()
-                       end
-                   end
-                   wait(1)
-               end
-           end)
-           spawn(function()
-               while autoFarmActive do
-                   local hum = game.Players.LocalPlayer.Character.Humanoid
-                   local car = hum.SeatPart.Parent
-                   car.PrimaryPart = car.Body:FindFirstChild("#Weight")
-                   if not getfenv().first then
-                       if workspace.Workspace:FindFirstChild("Buildings") then
-                           workspace.Workspace.Buildings:Destroy()
-                       end
-                       car:PivotTo(CFrame.new(Vector3.new(-7594.541015625, -3.513848304748535, 5130.95263671875), Vector3.new(-6205.29833984375, -3.5030133724212646, 8219.853515625)))
-                       wait(0.1)
-                   end
-                   car.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
-                   getfenv().first = true
-                   local location = Vector3.new(-6205.29833984375, 100, 8219.853515625)
-                   repeat
-                       task.wait()
-                       mathlock = 550
-                       car.PrimaryPart.Velocity = car.PrimaryPart.CFrame.LookVector * mathlock
-                       car:PivotTo(CFrame.new(car.PrimaryPart.Position, location))
-                   until game.Players.LocalPlayer:DistanceFromCharacter(location) < 50 or not autoFarmActive
-                   car.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
-                   location = Vector3.new(-7594.541015625, 100, 5130.95263671875)
-                   repeat
-                       task.wait()
-                       mathlock = 550
-                       car.PrimaryPart.Velocity = car.PrimaryPart.CFrame.LookVector * mathlock
-                       car:PivotTo(CFrame.new(car.PrimaryPart.Position, location))
-                   until game.Players.LocalPlayer:DistanceFromCharacter(location) < 50 or not autoFarmActive
-                   car.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
-               end
-           end)
-       else
-           -- Optionally, you can add code to handle what happens when the toggle is turned off
-       end
-   end,
+    Name = "Auto Vehicle Tween",
+    CurrentValue = false,
+    Flag = "AutoTweenToggle",
+    Callback = function(Value)
+        autoFarmActive = Value
+
+        if autoFarmActive then
+            spawn(function()
+                local checkpoints = {
+                    Vector3.new(-8472.7, 1.7, 1750.7),
+                    Vector3.new(-8680.8, 1.7, 1540.1),
+                    Vector3.new(-8885.7, 1.7, 1324.1),
+                    Vector3.new(-9096.2, 1.8, 1119.8),
+                    Vector3.new(-9318.4, 1.7, 907.5),
+                    Vector3.new(-9532.9, 1.7, 686.9),
+                    Vector3.new(-9744.1, 1.8, 479.0),
+                    Vector3.new(-9955.3, 1.8, 264.7),
+                    Vector3.new(-10160.1, 1.8, 56.2),
+                    Vector3.new(-10376.1, 1.7, -160.1),
+                    Vector3.new(-10587.7, 1.7, -375.6),
+                    Vector3.new(-10797.5, 1.8, -584.4),
+                    Vector3.new(-11009.2, 1.7, -796.2),
+                    Vector3.new(-11220.5, 1.7, -1007.3),
+                    Vector3.new(-11436.4, 1.8, -1222.0),
+                    Vector3.new(-11647.4, 1.8, -1435.4),
+                    Vector3.new(-11854.0, 1.7, -1641.6),
+                    Vector3.new(-12070.2, 1.8, -1855.8),
+                    Vector3.new(-12290.0, 1.7, -2061.5),  -- New checkpoint 1
+                    Vector3.new(-12625.8, 1.7, -2396.9)   -- New checkpoint 2
+                }
+
+                for i, v in pairs(workspace:GetChildren()) do
+                    if v.ClassName == "Model" and (v:FindFirstChild("Container") or v.Name == "PortCraneOversized") then
+                        v:Destroy()
+                    end
+                end
+
+                local hum = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+                if hum then
+                    local car = hum.SeatPart.Parent
+                    car.PrimaryPart = car.Body:FindFirstChild("#Weight")
+
+                    for _, checkpoint in ipairs(checkpoints) do
+                        if not autoFarmActive then break end
+                        local location = checkpoint + Vector3.new(0, 2, 0)
+                        repeat
+                            task.wait()
+                            local mathlock = 448
+                            car.PrimaryPart.Velocity = (location - car.PrimaryPart.Position).Unit * mathlock
+                            car:PivotTo(CFrame.new(car.PrimaryPart.Position, location))
+                        until (car.PrimaryPart.Position - location).Magnitude < 10 or not autoFarmActive
+                        car.PrimaryPart.Velocity = Vector3.new(0,0,0)
+                    end
+                end
+            end)
+        end
+    end,
 })
 
 local Button = Tab:CreateButton({
    Name = "BoostFPS",
    Callback = function()
-      -- The function that takes place when the button is pressed
-
-      -- SUPER FAST MODE
       local Lighting = game:GetService("Lighting")
       local workspace = game:GetService("Workspace")
 
@@ -113,11 +110,9 @@ local Button = Tab:CreateButton({
               obj.Material = Enum.Material.SmoothPlastic
               obj.Reflectance = 0
               obj.CastShadow = false
-
               if obj.Material == Enum.Material.Glass or obj.Material == Enum.Material.Neon then
                   obj.Material = Enum.Material.SmoothPlastic
               end
-
               if REMOVE_MESHES and obj:IsA("MeshPart") then
                   obj.Transparency = 1
               end
@@ -202,7 +197,6 @@ local Input = Tab:CreateInput({
     RemoveTextAfterFocusLost = false,
     Flag = "Input1",
     Callback = function(Text)
-        -- Call PlayMusic with the input as the sound ID
         PlayMusic(Text)
     end,
 })
